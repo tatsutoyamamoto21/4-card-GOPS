@@ -1,3 +1,7 @@
+import numpy as np
+from GOPS import solve2by2, solve2byN, solve3by3, dominationfinal
+
+
 def solve4by4(payout_a, payout_b, moves=False):
     # case when game is singular and irreducible
     if (payout_a[0] == payout_a[1]).all() and (payout_a[1] == payout_a[2]).all() and (payout_a[2] == payout_a[3]).all() and (payout_b[:,0] == payout_b[:,1]).all() and (payout_b[:,1] == payout_b[:,2]).all() and (payout_b[:,2] == payout_b[:,3]).all():
