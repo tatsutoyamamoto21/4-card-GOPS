@@ -12,7 +12,7 @@ def solve3by3(payout_a, payout_b, moves=False):
         else: 
             return result
     
-    p_a, p_b = np.ones(3), np.ones(3)
+    p_a, p_b = np.ones([2, 3])
     result = dominationfinal(payout_a, payout_b, moves)
     
     if result[0].shape == (1,1):
@@ -21,7 +21,6 @@ def solve3by3(payout_a, payout_b, moves=False):
         out_a = result[0][0]
         out_b = result[1][0]
         if moves:
-            p_a, p_b = np.ones(3)
             for i in result[2]:
                 p_a[i] = 0
             for j in result[3]:
@@ -34,7 +33,6 @@ def solve3by3(payout_a, payout_b, moves=False):
         # take highest value
         ret = (result[0].sum() / max(result[0].shape), result[1].sum() / max(result[1].shape))
         if moves:
-            p_a, p_b = np.ones(3)
             for i in result[2]:
                 p_a[i] = 0
             for j in result[3]:
@@ -47,7 +45,6 @@ def solve3by3(payout_a, payout_b, moves=False):
         # take highest value
         ret = (result[0].sum() / max(result[0].shape), result[1].sum() / max(result[1].shape))
         if moves:
-            p_a, p_b = np.ones(3)
             for i in result[2]:
                 p_a[i] = 0
             for j in result[3]:
@@ -59,7 +56,6 @@ def solve3by3(payout_a, payout_b, moves=False):
         ##print(result[0].shape)
         # use solve2by2
         if moves:
-            p_a, p_b = np.ones(3)
             ret, strat = solve2by2(result[0], result[1], moves)
             for i in result[2]:
                 p_a[i] = 0
@@ -81,7 +77,6 @@ def solve3by3(payout_a, payout_b, moves=False):
         ##print(result[0].shape)
         # use solve2byN
         if moves:
-            p_a = np.ones(3)
             ret, strat = solve2byN(result[0], result[1], moves)
             for i in result[2]:
                 p_a[i] = 0
