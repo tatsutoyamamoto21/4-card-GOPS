@@ -1,18 +1,14 @@
-import numpy as np
-from GOPS import solve2by2, solve2byN, dominationfinal
-
-
-def solve3by3(payout_a, payout_b, moves=False):
+def solve4by4(payout_a, payout_b, moves=False):
     # case when game is singular and irreducible
-    if (payout_a[0] == payout_a[1]).all() and (payout_a[1] == payout_a[2]).all() and (payout_b[:,0] == payout_b[:,1]).all() and (payout_b[:,1] == payout_b[:,2]).all():
+    if (payout_a[0] == payout_a[1]).all() and (payout_a[1] == payout_a[2]).all() and (payout_a[2] == payout_a[3]).all() and (payout_b[:,0] == payout_b[:,1]).all() and (payout_b[:,1] == payout_b[:,2]).all() and (payout_b[:,2] == payout_b[:,3]).all():
         result = (payout_a[0,0], payout_b[0,0])
-        strategy = ([1,1,1], [1,1,1])
+        strategy = ([1,1,1,1], [1,1,1,1])
         if moves:
             return result, strategy
         else: 
             return result
     
-    p_a, p_b = np.ones(3), np.ones(3)
+    p_a, p_b = np.ones(4), np.ones(4)
     result = dominationfinal(payout_a, payout_b, moves)
     
     if result[0].shape == (1,1):
@@ -21,7 +17,7 @@ def solve3by3(payout_a, payout_b, moves=False):
         out_a = result[0][0]
         out_b = result[1][0]
         if moves:
-            p_a, p_b = np.ones(3)
+            p_a, p_b = np.ones(4)
             for i in result[2]:
                 p_a[i] = 0
             for j in result[3]:
@@ -34,7 +30,7 @@ def solve3by3(payout_a, payout_b, moves=False):
         # take highest value
         ret = (result[0].sum() / max(result[0].shape), result[1].sum() / max(result[1].shape))
         if moves:
-            p_a, p_b = np.ones(3)
+            p_a, p_b = np.ones(4)
             for i in result[2]:
                 p_a[i] = 0
             for j in result[3]:
@@ -47,7 +43,7 @@ def solve3by3(payout_a, payout_b, moves=False):
         # take highest value
         ret = (result[0].sum() / max(result[0].shape), result[1].sum() / max(result[1].shape))
         if moves:
-            p_a, p_b = np.ones(3)
+            p_a, p_b = np.ones(4)
             for i in result[2]:
                 p_a[i] = 0
             for j in result[3]:
@@ -59,7 +55,7 @@ def solve3by3(payout_a, payout_b, moves=False):
         ##print(result[0].shape)
         # use solve2by2
         if moves:
-            p_a, p_b = np.ones(3)
+            p_a, p_b = np.ones(4)
             ret, strat = solve2by2(result[0], result[1], moves)
             for i in result[2]:
                 p_a[i] = 0
@@ -81,16 +77,21 @@ def solve3by3(payout_a, payout_b, moves=False):
         ##print(result[0].shape)
         # use solve2byN
         if moves:
-            p_a = np.ones(3)
+            p_a, p_b = np.ones(4)
             ret, strat = solve2byN(result[0], result[1], moves)
             for i in result[2]:
                 p_a[i] = 0
+            for j in result[3]:
+                p_b[j] = 0
             for a, i in enumerate(p_a):
                 if a != 0:
                     p_a[i] = strat[0][0]
                     strat[0].remove(strat[0][0])
-            strat[0] = p_a
-            return ret, strat
+            for b, j in enumerate(p_b):
+                if b != 0:
+                    p_a[j] = strat[1][0]
+                    strat[1].remove(strat[1][0])
+            return ret, (p_a, p_b)
         
         return solve2byN(result[0], result[1], moves)
 
@@ -102,35 +103,64 @@ def solve3by3(payout_a, payout_b, moves=False):
         p_b = solve2byN(result[1].T, result[0].T, moves=True)[1][0]
         p_a = solve2byN(result[1].T, result[0].T, moves=True)[1][1]
         if moves:
-            strat_b = np.ones(3)
+            strat_a, strat_b = np.ones(4)
+            for i in result[2]:
+                strat_a[i] = 0
             for j in result[3]:
                 strat_b[j] = 0
+            for a, i in enumerate(strat_a):
+                if a != 0:
+                    strat_a[i] = p_a[0]
+                    p_a.remove(p_a[0])
             for b, j in enumerate(strat_b):
                 if b != 0:
                     strat_b[j] = p_b[0]
                     p_b.remove(p_b[0])
-            return (a, b), (p_a, strat_b)
-
+            return (a, b), (strat_a, strat_b) 
+        
         return (a, b)
+    
+    elif result[0].shape == (3,3):
+        # use solve 3by3
+        if moves:
+            p_a, p_b = np.ones(4)
+            ret, strat = solve3by3(result[0], result[1], moves)
+            for i in result[2]:
+                p_a[i] = 0
+            for j in result[3]:
+                p_b[j] = 0
+            for a, i in enumerate(p_a):
+                if a != 0:
+                    p_a[i] = strat[0][0]
+                    strat[0].remove(strat[0][0])
+            for b, j in enumerate(p_b):
+                if b != 0:
+                    p_a[j] = strat[1][0]
+                    strat[1].remove(strat[1][0])
+            return ret, (p_a, p_b)
+        
+        return solve3by3(result[0], result[1], moves)
     
     else:
         ##print(result[0].shape)
         # solve the system of equations
-        A, B = np.ones((3,3)), np.ones((3,3))
-        A[1,0], A[1,1], A[1,2] = payout_b[0,0]-payout_b[0,1], payout_b[1,0]-payout_b[1,1], payout_b[2,0]-payout_b[2,1]
-        A[2,0], A[2,1], A[2,2] = payout_b[0,0]-payout_b[0,2], payout_b[1,0]-payout_b[1,2], payout_b[2,0]-payout_b[2,2]
+        A, B = np.ones((4,4)), np.ones((4,4))
+        A[1,0], A[1,1], A[1,2], A[1,3] = payout_b[0,0]-payout_b[0,1], payout_b[1,0]-payout_b[1,1], payout_b[2,0]-payout_b[2,1], payout_b[3,0]-payout_b[3,1]
+        A[2,0], A[2,1], A[2,2], A[2,3] = payout_b[0,0]-payout_b[0,2], payout_b[1,0]-payout_b[1,2], payout_b[2,0]-payout_b[2,2], payout_b[3,0]-payout_b[3,2]
+        A[3,0], A[3,1], A[3,2], A[3,3] = payout_b[0,0]-payout_b[0,3], payout_b[1,0]-payout_b[1,3], payout_b[2,0]-payout_b[2,3], payout_b[3,0]-payout_b[3,3]
 
-        B[1,0], B[1,1], B[1,2] = payout_a[0,0]-payout_a[1,0], payout_a[0,1]-payout_a[1,1], payout_a[0,2]-payout_a[1,2] 
-        B[2,0], B[2,1], B[2,2] = payout_a[0,0]-payout_a[2,0], payout_a[0,1]-payout_a[2,1], payout_a[0,2]-payout_a[2,2]
+        B[1,0], B[1,1], B[1,2], B[1,3] = payout_a[0,0]-payout_a[1,0], payout_a[0,1]-payout_a[1,1], payout_a[0,2]-payout_a[1,2], payout_a[0,3]-payout_a[1,3] 
+        B[2,0], B[2,1], B[2,2], B[2,3] = payout_a[0,0]-payout_a[2,0], payout_a[0,1]-payout_a[2,1], payout_a[0,2]-payout_a[2,2], payout_a[0,3]-payout_a[2,3]
+        B[3,0], B[3,1], B[3,2], B[3,3] = payout_a[0,0]-payout_a[3,0], payout_a[0,1]-payout_a[3,1], payout_a[0,2]-payout_a[3,2], payout_a[0,3]-payout_a[3,3]
         #print(payout_a)
         #print(payout_b)
         #print(A)
         #print(B)
-        p_a = np.linalg.solve(A, np.array([1, 0, 0]))
-        p_b = np.linalg.solve(B, np.array([1, 0, 0])) 
+        p_a = np.linalg.solve(A, np.array([1, 0, 0, 0]))
+        p_b = np.linalg.solve(B, np.array([1, 0, 0, 0])) 
         
-        ret = (p_b[0]*payout_a[0, 0] + p_b[1]*payout_a[0, 1] + p_b[2]*payout_a[0, 2], p_a[0]*payout_b[0, 0] + p_a[1]*payout_b[1, 0] + p_a[2]*payout_b[2, 0])
+        ret = (p_b[0]*payout_a[0, 0] + p_b[1]*payout_a[0, 1] + p_b[2]*payout_a[0, 2] + p_b[3]*payout_a[0, 3], p_a[0]*payout_b[0, 0] + p_a[1]*payout_b[1, 0] + p_a[2]*payout_b[2, 0]) + p_a[3]*payout_b[3, 0]
 
         if moves:
-            return ret, (p_a, p_b)
+             return ret, (p_a, p_b)
         return ret
