@@ -5,4 +5,4 @@ build-backend = "hatchling.build"
 [project]
 name = "GameTheory_CW1"
 version = "0.1"
-dependencies = ["numpy", "itertools"]
+dependencies = ["numpy"]
