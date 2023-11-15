@@ -124,7 +124,17 @@ def solve3by3(payout_a, payout_b, moves=False):
         #print(A)
         #print(B)
         p_a = np.linalg.solve(A, np.array([1, 0, 0]))
-        p_b = np.linalg.solve(B, np.array([1, 0, 0])) 
+        p_b = np.linalg.solve(B, np.array([1, 0, 0]))
+
+        for i, a in enumerate(p_a):
+            if a < 0:
+                p_a[i] = 0
+                p_a = p_a/np.sum(p_a)
+        
+        for j, b in enumerate(p_b):
+            if b < 0:
+                p_b[j] = 0
+                p_b = p_b/np.sum(p_b)
         
         ret = (p_b[0]*payout_a[0, 0] + p_b[1]*payout_a[0, 1] + p_b[2]*payout_a[0, 2], p_a[0]*payout_b[0, 0] + p_a[1]*payout_b[1, 0] + p_a[2]*payout_b[2, 0])
 

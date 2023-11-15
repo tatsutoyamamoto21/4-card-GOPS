@@ -161,10 +161,22 @@ def solve4by4(payout_a, payout_b, moves=False):
         #print(payout_b)
         #print(A)
         #print(B)
+        #print(result)
         p_a = np.linalg.solve(A, np.array([1, 0, 0, 0]))
-        p_b = np.linalg.solve(B, np.array([1, 0, 0, 0])) 
+        p_b = np.linalg.solve(B, np.array([1, 0, 0, 0]))
+        print(p_a, p_b)
+
+        for i, a in enumerate(p_a):
+            if a < 0:
+                p_a[i] = 0
+                p_a = p_a/np.sum(p_a)
         
-        ret = (p_b[0]*payout_a[0, 0] + p_b[1]*payout_a[0, 1] + p_b[2]*payout_a[0, 2] + p_b[3]*payout_a[0, 3], p_a[0]*payout_b[0, 0] + p_a[1]*payout_b[1, 0] + p_a[2]*payout_b[2, 0]) + p_a[3]*payout_b[3, 0]
+        for j, b in enumerate(p_b):
+            if b < 0:
+                p_b[j] = 0
+                p_b = p_b/np.sum(p_b)
+        
+        ret = (p_b[0]*payout_a[0, 0] + p_b[1]*payout_a[0, 1] + p_b[2]*payout_a[0, 2] + p_b[3]*payout_a[0, 3], p_a[0]*payout_b[0, 0] + p_a[1]*payout_b[1, 0] + p_a[2]*payout_b[2, 0] + p_a[3]*payout_b[3, 0])
 
         if moves:
              return ret, (p_a, p_b)
