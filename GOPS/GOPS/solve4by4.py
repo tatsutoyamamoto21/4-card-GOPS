@@ -126,9 +126,9 @@ def solve4by4(payout_a, payout_b, moves=False):
         if moves:
             ret, strat = solve3by3(result[0], result[1], moves)
             strat = list(strat)
-            print(solve3by3(result[0], result[1], moves))
-            print(strat)
-            print(result)
+            #print(solve3by3(result[0], result[1], moves))
+            #print(strat)
+            #print(result)
             for i in result[2]:
                 p_a[i] = 0
             for j in result[3]:
@@ -164,7 +164,7 @@ def solve4by4(payout_a, payout_b, moves=False):
         #print(result)
         p_a = np.linalg.solve(A, np.array([1, 0, 0, 0]))
         p_b = np.linalg.solve(B, np.array([1, 0, 0, 0]))
-        print(p_a, p_b)
+        #print(p_a, p_b)
 
         for i, a in enumerate(p_a):
             if a < 0:
