@@ -57,15 +57,16 @@ def solve3by3(payout_a, payout_b, moves=False):
         # use solve2by2
         if moves:
             ret, strat = solve2by2(result[0], result[1], moves)
+            strat = list(strat)
             for i in result[2]:
                 p_a[i] = 0
             for j in result[3]:
                 p_b[j] = 0
-            for a, i in enumerate(p_a):
+            for i, a in enumerate(p_a):
                 if a != 0:
                     p_a[i] = strat[0][0]
                     strat[0].remove(strat[0][0])
-            for b, j in enumerate(p_b):
+            for j, b in enumerate(p_b):
                 if b != 0:
                     p_a[j] = strat[1][0]
                     strat[1].remove(strat[1][0])
@@ -78,9 +79,10 @@ def solve3by3(payout_a, payout_b, moves=False):
         # use solve2byN
         if moves:
             ret, strat = solve2byN(result[0], result[1], moves)
+            strat = list(strat)
             for i in result[2]:
                 p_a[i] = 0
-            for a, i in enumerate(p_a):
+            for i, a in enumerate(p_a):
                 if a != 0:
                     p_a[i] = strat[0][0]
                     strat[0].remove(strat[0][0])
@@ -100,7 +102,7 @@ def solve3by3(payout_a, payout_b, moves=False):
             strat_b = np.ones(3)
             for j in result[3]:
                 strat_b[j] = 0
-            for b, j in enumerate(strat_b):
+            for j, b in enumerate(strat_b):
                 if b != 0:
                     strat_b[j] = p_b[0]
                     p_b.remove(p_b[0])
