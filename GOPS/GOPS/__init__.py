@@ -1,4 +1,4 @@
-from .domination import dominationfinal
+from .domination import dominationcheck, dominationdelete, dominationfinal
 from .solve2by2 import solve2by2
 from .payout2by2 import payout2by2
 from .solve2byN import solve2byN

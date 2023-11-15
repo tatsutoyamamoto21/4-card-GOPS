@@ -49,14 +49,18 @@ def dominationfinal(A, B, moves=False):
     removedrows = []
     removedcols = []
     i = 0
+    j = 0
     while (A.shape != dominationdelete(A, B, moves)[0].shape) and (B.shape != dominationdelete(A, B, moves)[1].shape) :
         result = dominationdelete(A, B, moves)
         A = result[0]
         B = result[1]
 
         if moves:
-            removedrows += [x+i for x in result[2]]
-            removedcols += [y+i for y in result[3]]
-            i += 1
+            if result[2]:
+                removedrows += [x+i for x in result[2]]
+                i+=1
+            if result[3]:
+                removedcols += [y+j for y in result[3]]
+                j += 1
 
     return A, B, removedrows, removedcols
