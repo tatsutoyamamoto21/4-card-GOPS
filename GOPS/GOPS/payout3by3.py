@@ -46,4 +46,4 @@ def payout3by3(c, a, b, moves=False):
                 payout_a[i,j] += payout2by2(c_a, a, b)[0] 
                 payout_b[i,j] += payout2by2(c_b, a, b)[1] + c1
             c_a, c_b, a, b = c_original.copy(), c_original.copy(), a_original.copy(), b_original.copy()
-    return solve3by3(payout_a, payout_b)
+    return solve3by3(payout_a, payout_b, moves)

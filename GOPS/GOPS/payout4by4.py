@@ -1,5 +1,5 @@
 import numpy as np
-from GOPS import payout3by3
+from GOPS import payout3by3, solve4by4
 
 
 def payout4by4(c, a, b, moves=False):
@@ -39,4 +39,4 @@ def payout4by4(c, a, b, moves=False):
                 payout_a[i,j] += to_add[0] 
                 payout_b[i,j] += to_add[1] + c1
             c, a, b = c_original.copy(), a_original.copy(), b_original.copy()
-    return payout_a, payout_b
+    return solve4by4(payout_a, payout_b, moves)
