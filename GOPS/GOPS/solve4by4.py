@@ -68,7 +68,7 @@ def solve4by4(payout_a, payout_b, moves=False):
                     strat[0].remove(strat[0][0])
             for j, b in enumerate(p_b):
                 if b != 0:
-                    p_a[j] = strat[1][0]
+                    p_b[j] = strat[1][0]
                     strat[1].remove(strat[1][0])
             return ret, (p_a, p_b)
         
@@ -90,7 +90,7 @@ def solve4by4(payout_a, payout_b, moves=False):
                     strat[0].remove(strat[0][0])
             for j, b in enumerate(p_b):
                 if b != 0:
-                    p_a[j] = strat[1][0]
+                    p_b[j] = strat[1][0]
                     strat[1].remove(strat[1][0])
             return ret, (p_a, p_b)
         
@@ -126,6 +126,9 @@ def solve4by4(payout_a, payout_b, moves=False):
         if moves:
             ret, strat = solve3by3(result[0], result[1], moves)
             strat = list(strat)
+            print(solve3by3(result[0], result[1], moves))
+            print(strat)
+            print(result)
             for i in result[2]:
                 p_a[i] = 0
             for j in result[3]:
@@ -137,7 +140,7 @@ def solve4by4(payout_a, payout_b, moves=False):
 
             for j, b in enumerate(p_b):
                 if b != 0:
-                    p_a[j] = strat[1][0]
+                    p_b[j] = strat[1][0]
                     strat[1] = np.delete(strat[1], 0)
             return ret, (p_a, p_b)
         
