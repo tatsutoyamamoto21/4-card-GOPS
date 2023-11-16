@@ -94,8 +94,8 @@ def solve3by3(payout_a, payout_b, moves=False):
     elif result[0].shape == (3,2):
         ##print(result[0].shape)
         # use solve 2byN
-        b = solve2byN(result[1].T, result[0].T, moves)[0]
-        a = solve2byN(result[1].T, result[0].T, moves)[1]
+        b = solve2byN(result[1].T, result[0].T, moves=False)[0]
+        a = solve2byN(result[1].T, result[0].T, moves=False)[1]
         p_b = solve2byN(result[1].T, result[0].T, moves=True)[1][0]
         p_a = solve2byN(result[1].T, result[0].T, moves=True)[1][1]
         if moves:
