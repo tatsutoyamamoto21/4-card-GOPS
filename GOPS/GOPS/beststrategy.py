@@ -1,11 +1,27 @@
 import itertools
 import numpy as np
+from numbers import Number
 from GOPS import payout2by2, payout3by3, payout4by4
 
 def beststrategy(card, rem_cards, a_cards, b_cards, payoff=False):
     '''
-    Returns best startegy for player A given the upcard, the remaining cards, the cards A has left and the cards B has left.
-    Also returns payoff if payoff is set to True.
+    Returns best startegy for player A given the card, the remaining cards, the
+    cards A has left and the cards B has left. Also returns payoff if payoff is
+    set to True.
+    
+    Input:
+    card: integer, the current card to bet on
+    rem_cards: list, the remaining cards to bet on
+    a_cards: list, Player A's cards
+    b_cards: list, Player B's cards
+    payoff: True or False, default is False
+
+    Output:
+    pay, strat: if payoff is true, tuple with pay as a number representing
+    expected payoff and strat is a strategy array, where ith element
+    corresponds to the probability player A should play the ith element in
+    a_cards
+    strat: if payoff is false, strat as above
     '''
     perms = list(itertools.permutations(rem_cards))
     for i, p in enumerate(perms):
@@ -48,6 +64,9 @@ def beststrategy(card, rem_cards, a_cards, b_cards, payoff=False):
     strat = strat/np.sum(strat)
 
     if payoff:
-        return pay, strat
+        if isinstance(pay, Number):
+            return pay, strat
+        else:
+            return pay[0], strat
 
     return strat
